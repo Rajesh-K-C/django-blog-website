@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Categories
+{% endblock %}
+
+{% block content %}
+  <main>
+    <section class="container row gap-3 my-3">
+      <h2>Categories</h2>
+      {% for category in categories %}
+        <div class="card text-bg-secondary" style="max-width: 18rem;">
+          <a href="{% url 'category' category.id %}" class="text-decoration-none text-bg-secondary">
+            {% comment %} <div class="card-header">Header</div> {% endcomment %}
+            <div class="card-body">
+              <h5 class="card-title">{{ category.category }}</h5>
+              <p class="card-text">No. of blog posts: {{ category.num_blogs }}</p>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </section>
+  </main>
+{% endblock %}

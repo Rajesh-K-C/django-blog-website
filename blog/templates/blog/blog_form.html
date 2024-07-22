@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {% if form.instance.pk %}
+    Edit Blog
+  {% else %}
+    Create Blog
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <h2>
+    {% if form.instance.pk %}
+      Edit Blog
+    {% else %}
+      Create Blog
+    {% endif %}
+  </h2>
+
+  <form method="post" enctype="multipart/form-data" class="form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}

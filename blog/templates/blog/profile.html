@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Profile - {{ user }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    {% comment %} {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %} {% endcomment %}
+    <section class="row d-flex justify-content-center">
+      <div class="col-md-7">
+        <div class="card p-3 py-4 bg-body-tertiary">
+          <div class="text-center">
+            <img src="/media/{{ user.profile.image }}" width="300px" class="rounded-circle" style="aspect-ratio: 1/1; object-fit: cover;" />
+          </div>
+
+          <div class="text-center mt-3">
+            <span class="bg-secondary p-1 px-4 rounded text-white">{{ user.username }}</span>
+            <h5 class="mt-2 mb-0">Name: <span class="first-name">{{ user.first_name }}</span> <span class="last-name">{{ user.last_name }}</span></h5>
+            <span class="address">Address: {{ user.profile.address }}</span>
+
+            <div class="px-4 mt-1">
+              <p class="fonts bio">{{ user.profile.bio }}</p>
+            </div>
+            <div class="buttons">
+              <button type="button" class="btn btn-outline-primary px-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit Profile</button>
+              {% comment %} <a href="{% url 'change_password' %}"><button type="button" class="btn btn-outline-primary px-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Change Password</button></a> {% endcomment %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% if blogs %}
+      <section class="container row gap-3 mt-3 bg-body-tertiary p-3 rounded-3">
+        <h5 class="">Your Posts</h5>
+        {% for blog in blogs %}
+          <div class="card" style="width: 18rem;">
+            <img src="{{ blog.photo.url }}" class="card-img-top img" alt="..." />
+            <div class="card-body">
+              <h5 class="card-title">
+                {% if blog.title|length > 20 %}
+                  {{ blog.title|slice:':20' }}...
+                {% else %}
+                  {{ blog.title }}
+                {% endif %}
+              </h5>
+              <p class="card-text">
+                {% if blog.content|length > 50 %}
+                  {{ blog.content|slice:':50' }}...
+                {% else %}
+                  {{ blog.content }}
+                {% endif %}
+              </p>
+              <p class="card-text my-1">{{ blog.category }}</p>
+              <p class="card-text">
+                <small class="text-body-secondary">Last updated 3 mins ago</small>
+              </p>
+              <p>
+                <a href="{% url 'blog_view' blog.id %}" class="btn btn-primary">Read More</a>
+              </p>
+              <p>
+                <a href="{% url 'blog_edit' blog.id %}" class="btn btn-primary">Edit</a>
+                <button type="button" onclick="deleteBlog({{ blog.id }})" class="btn btn-danger">Delete</button>
+              </p>
+            </div>
+          </div>
+        {% endfor %}
+      </section>
+    {% endif %}
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit your profile</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+            {{ profile_form.as_p }}
+            <button type="submit" class="btn btn-primary">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ blog.title }}
+{% endblock %}
+
+{% block content %}
+  <section class="m-auto bg-body-tertiary p-3 rounded-4" style="max-width: 800px;">
+    <h1 class="fs-3">{{ blog.title }}</h1>
+    <div class="d-flex justify-content-between">
+      <div class="d-flex gap-2 align-items-center my-2">
+        <span><img class="rounded-circle" width="40px" src="/media/{{ blog.user.profile.image }}" alt="" /></span>
+        <p class="d-flex flex-column m-0">
+          <span>{{ blog.user.username }}</span>
+          <span>Created: {{ blog.created_at|date:'d M, Y' }}</span>
+        </p>
+      </div>
+    </div>
+    <figure>
+      <img src="{{ blog.photo.url }}" alt="{{ blog.title }}" class="img" style="width: 100%; " />
+    </figure>
+    <div style="white-space: pre-wrap;">{{ blog.content }}</div>
+  </section>
+{% endblock %}
